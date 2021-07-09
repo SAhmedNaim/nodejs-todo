@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers } from "../services/userService";
+import { getAllUsers, getUserById } from "../services/userService";
 
 const router = express.Router();
 
@@ -12,6 +12,22 @@ const getHandler = async (req, res, next) => {
     }
 };
 
+const getByIdHandler = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const user = await getUserById(id);
+        if (user) {
+            res.status(200).send(user);
+        }
+        else {
+            throw new NotFound('User not found by the id: ' + id);
+        }
+    } catch (error) {
+        return next(error, req, res);
+    }
+};
+
 router.get('/', getHandler);
+router.get('/:id', getByIdHandler);
 
 export default router;
