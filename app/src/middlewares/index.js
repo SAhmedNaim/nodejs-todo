@@ -1,4 +1,28 @@
-import { BadRequest } from '../utils/errors';
+import {  GeneralError, BadRequest } from '../utils/errors';
+
+export const handleError = async (err, req, res, next) => {
+    let code = 500;
+    if (err instanceof GeneralError) {
+        code = err.getCode();
+    }
+
+    let correlationId = req.headers['x-correlation-id'];
+    return res.status(code).json({
+        correlationId: correlationId, message: err.message
+    });
+}
+
+export const handleRequest = async (req, res, next) => {
+    let correlationId = req.headers['x-correlation-id'];
+    if (!correlationId) {
+        correlationId = Date.now().toString();
+        req.headers['x-correlation-id'] = correlationId;
+    }
+
+    res.set('x-correlation-id', correlationId);
+
+    return next();
+}
 
 export const handleValidation = (validate) => {
     return (req, res, next) => {
