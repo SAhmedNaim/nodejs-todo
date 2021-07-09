@@ -14,3 +14,12 @@ export class BadRequest extends GeneralError {
     }
     getCode() { return 400; }
 }
+
+export class NotFound extends GeneralError {
+    constructor(message) {
+        super(message);
+        this.name = 'NotFound';
+    }
+
+    getCode() { return 404; }    
+}

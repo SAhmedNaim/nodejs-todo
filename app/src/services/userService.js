@@ -20,3 +20,16 @@ export const saveUser = async (user) => {
     const savedUser = await model.save();
     return savedUser._id;
 };
+
+export const update = async (user) => {
+    const id = user.id;
+    const User = models.User;
+    let model = await User.findById(id);
+    if (model) {
+        model.username = user.username;
+        model.save();
+        return model._id;
+    }
+
+    throw new NotFound('User not found by the id: ' + id);
+}
