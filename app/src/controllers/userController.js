@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllUsers, getUserById, saveUser, update } from "../services/userService";
+import { getAllUsers, getUserById, saveUser, update, deleteById } from "../services/userService";
 import { handleValidation } from "../middlewares";
 import validators from "../models/request-models";
 
@@ -49,9 +49,20 @@ const putHandler = async (req, res, next) => {
     }
 }
 
+const deleteHandler = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        await deleteById(id);
+        res.status(200).send("User has been deleted");
+    } catch (error) {
+        return next(error, req, res);
+    }
+}
+
 router.get('/', getHandler);
 router.get('/:id', getByIdHandler);
 router.post('/', handleValidation(validators.userSchemaValidate), postHandler);
 router.put('/', putHandler);
+router.delete('/:id', deleteHandler);
 
 export default router;

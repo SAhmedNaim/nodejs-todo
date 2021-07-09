@@ -31,5 +31,16 @@ export const update = async (user) => {
         return model._id;
     }
 
-    throw new NotFound('User not found by the id: ' + id);
+    throw new NotFound(`User not found by the id: ${id}`);
+}
+
+export const deleteById = async (id) => {
+    const User = models.User;
+    let model = await User.findById(id);
+    if (model) {
+        let result = await User.deleteOne({ _id: id });
+        return result;
+    }
+
+    throw new NotFound(`User not found by the id: ${id}`);
 }
