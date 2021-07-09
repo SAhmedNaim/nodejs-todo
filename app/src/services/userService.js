@@ -1,4 +1,5 @@
 import models from "../models/data-models";
+import { UserViewModel } from "../models/view-models/user-view-model";
 
 export const getAllUsers = async () => {
     const User = models.User;
