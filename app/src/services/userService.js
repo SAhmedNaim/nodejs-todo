@@ -14,3 +14,9 @@ export const getUserById = async (id) => {
     let viewModel = new UserViewModel(model);
     return viewModel;
 }
+
+export const saveUser = async (user) => {
+    const model = new models.User(user);
+    const savedUser = await model.save();
+    return savedUser._id;
+};
