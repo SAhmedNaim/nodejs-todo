@@ -1,5 +1,7 @@
 import express from "express";
 import { getAllUsers, getUserById, saveUser } from "../services/userService";
+import { handleValidation } from "../middlewares";
+import validators from "../models/request-models";
 
 const router = express.Router();
 
@@ -39,6 +41,6 @@ const postHandler = async (req, res, next) => {
 
 router.get('/', getHandler);
 router.get('/:id', getByIdHandler);
-router.post('/', postHandler);
+router.post('/', handleValidation(validators.userSchemaValidate), postHandler);
 
 export default router;
