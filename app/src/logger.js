@@ -2,7 +2,16 @@ import winston from "winston";
 import expressWinston from "express-winston";
 import winstonFile from "winston-daily-rotate-file";
 import winstonMongo from "winston-mongodb";
+import { ElasticsearchTransport } from "winston-elasticsearch";
 import { uri } from "./mongo";
+
+const elasticsearchOptions = {
+    level: 'info',
+    clientOpts: { node: 'http://localhost:9200' },
+    indexPrefix: 'log-nodejs-todo'
+};
+
+const esTransport = new (ElasticsearchTransport)(elasticsearchOptions);
 
 const mongoErrorTransport = new winston.transports.MongoDB({
     db: uri,
@@ -31,7 +40,8 @@ const getMessage = (req, res) => {
 export const infoLogger = () => expressWinston.logger({
     transports: [
         new winston.transports.Console(),
-        fileInfoTransport
+        fileInfoTransport,
+        esTransport
     ],
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
     meta: true, // Meta might be true or false
@@ -42,7 +52,8 @@ export const errorLogger = () => expressWinston.errorLogger({
     transports: [
         new winston.transports.Console(),
         fileErrorTransport,
-        mongoErrorTransport
+        mongoErrorTransport,
+        esTransport
     ],
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
     meta: true, // // Meta might be true or false

@@ -20,6 +20,7 @@
         "nodemon": "^2.0.10",
         "winston": "^3.3.3",
         "winston-daily-rotate-file": "^4.5.5",
+        "winston-elasticsearch": "^0.15.7",
         "winston-mongodb": "^5.0.7"
     }
 }
