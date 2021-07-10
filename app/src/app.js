@@ -1,7 +1,7 @@
 import express from "express";
 import configureRoutes from "./controllers";
 import { handleRequest, handleError } from "./middlewares/index";
-import { infoLogger } from "./logger";
+import { infoLogger, errorLogger } from "./logger";
 import dotenv from "dotenv";
 
 const app = express();
@@ -16,6 +16,11 @@ if (process.env.ENVIRONMENT != 'TEST')
 }
 
 configureRoutes(app);
+
+if (process.env.ENVIRONMENT != 'TEST')
+{
+    app.use(errorLogger());
+}
 
 app.use(handleError);
 

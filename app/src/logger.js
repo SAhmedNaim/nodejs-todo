@@ -7,6 +7,11 @@ const fileInfoTransport = new (winston.transports.DailyRotateFile) ({
     datePattern: 'yyyy-MM-DD-HH'
 });
 
+const fileErrorTransport = new (winston.transports.DailyRotateFile) ({
+    filename: 'log/log-error-%DATE%.log',
+    datePattern: 'yyyy-MM-DD-HH'    
+});
+
 const getMessage = (req, res) => {
     let obj = {
         correlationId: req.headers['x-correlation-id'],
@@ -24,4 +29,14 @@ export const infoLogger = () => expressWinston.logger({
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
     meta: true, // Meta might be true or false
     msg: getMessage
+});
+
+export const errorLogger = () => expressWinston.errorLogger({
+    transports: [
+        new winston.transports.Console(),
+        fileErrorTransport
+    ],
+    format: winston.format.combine(winston.format.colorize(), winston.format.json()),
+    meta: true, // // Meta might be true or false
+    msg: '{ "correlationId": "{{ req.headers["x-correlation-id"] }}", "error": "{{ err.message }}" }'
 });
