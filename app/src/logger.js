@@ -1,6 +1,13 @@
 import winston from "winston";
 import expressWinston from "express-winston";
 import winstonFile from "winston-daily-rotate-file";
+import winstonMongo from "winston-mongodb";
+import { uri } from "./mongo";
+
+const mongoErrorTransport = new winston.transports.MongoDB({
+    db: uri,
+    metaKey: 'meta'
+})
 
 const fileInfoTransport = new (winston.transports.DailyRotateFile) ({
     filename: 'log/log-info-%DATE%.log',
@@ -34,7 +41,8 @@ export const infoLogger = () => expressWinston.logger({
 export const errorLogger = () => expressWinston.errorLogger({
     transports: [
         new winston.transports.Console(),
-        fileErrorTransport
+        fileErrorTransport,
+        mongoErrorTransport
     ],
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
     meta: true, // // Meta might be true or false

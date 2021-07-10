@@ -19,6 +19,7 @@
         "mongoose": "^5.13.2",
         "nodemon": "^2.0.10",
         "winston": "^3.3.3",
-        "winston-daily-rotate-file": "^4.5.5"
+        "winston-daily-rotate-file": "^4.5.5",
+        "winston-mongodb": "^5.0.7"
     }
 }
